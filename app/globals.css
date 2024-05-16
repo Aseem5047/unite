@@ -2,32 +2,178 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+/* scrollbar styles */
+
+.no-scrollbar::-webkit-scrollbar {
+	display: none !important;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+::-webkit-scrollbar {
+	height: 0.25rem;
+	width: 0.5rem;
 }
+
+::-webkit-scrollbar-thumb {
+	background-color: #0e78f9;
+	border-radius: 15px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background-color: #03a8f477;
+}
+
+::-webkit-scrollbar-track {
+	background-color: transparent;
+	border-radius: 9999px;
+}
+
+/* ======== stream css overrides ======== */
+.str-video__call-stats {
+	max-width: 500px;
+	position: relative;
+}
+
+.str-video__speaker-layout__wrapper {
+	max-height: 700px;
+}
+
+.str-video__participant-details {
+	color: white;
+}
+
+.str-video__menu-container {
+	color: white;
+}
+
+.str-video__notification {
+	color: white;
+}
+
+.str-video__participant-list {
+	background-color: #1c1f2e;
+	padding: 10px;
+	border-radius: 10px;
+	color: white;
+	height: 100%;
+}
+
+.str-video__call-controls__button {
+	height: 40px;
+}
+
+.str-video__call-controls__button--variant-danger {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 40px;
+}
+
+.str-video__composite-button__button-group
+	.str-video__call-controls__button.str-video__menu-toggle-button {
+	height: 22px;
+}
+.glassmorphism {
+	background: rgba(255, 255, 255, 0.25);
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+}
+.glassmorphism2 {
+	background: rgba(18, 17, 17, 0.25);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+}
+
+/* ==== clerk class override ===== */
+
+.cl-userButtonPopoverActionButtonIcon {
+	color: white;
+}
+
+.cl-logoBox {
+	height: 40px;
+}
+.cl-dividerLine {
+	background: #252a41;
+	height: 2px;
+}
+
+.cl-socialButtonsBlockButton {
+	border: 3px solid #565761;
+	background: #ffffff21;
+	color: white;
+}
+
+.cl-internal-wkkub3 {
+	color: white;
+}
+.cl-userButtonPopoverActionButton {
+	color: white;
+}
+
+.cl-socialButtonsProviderIcon__github {
+	filter: invert(1);
+}
+
+.cl-card {
+	background: #137ef945;
+}
+
+.cl-userButtonPopoverActionButton:hover {
+	color: white;
+	opacity: 80%;
+}
+
+.cl-otpCodeFieldInput {
+	border: 1px solid white;
+	border-width: 2px !important;
+}
+
+.cl-otpCodeFieldInput:hover {
+	opacity: 50% !important;
+	border: 1px solid white;
+}
+
+/* =============================== */
+
+/* @layer base {
+	body {
+		@apply text-white;
+	}
+} */
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+	.flex-center {
+		@apply flex justify-center items-center;
+	}
+
+	.flex-between {
+		@apply flex justify-between items-center;
+	}
+}
+
+/* animation */
+
+.show-block {
+	width: 100%;
+	max-width: 350px;
+	display: block;
+	animation: show 0.7s forwards linear;
+}
+
+@keyframes show {
+	0% {
+		animation-timing-function: ease-in;
+		width: 0%;
+	}
+
+	100% {
+		animation-timing-function: ease-in;
+		width: 100%;
+	}
 }
