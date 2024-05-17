@@ -6,13 +6,14 @@ import Loader from "./Loader";
 import { useGetCalls } from "@/hooks/useGetCalls";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import MeetingCard from "../meeting/MeetingCard";
 import Link from "next/link";
 import Image from "next/image";
 
 const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
 	const router = useRouter();
+	const pathname = usePathname();
 	const { endedCalls, upcomingCalls, callRecordings, isLoading } =
 		useGetCalls();
 	const [recordings, setRecordings] = useState<CallRecording[]>([]);
@@ -33,9 +34,9 @@ const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
 	const getNoCallsMessage = () => {
 		switch (type) {
 			case "ended":
-				return "No Previous Calls";
+				return "No Previous Calls Found";
 			case "upcoming":
-				return "No Upcoming Calls";
+				return "No Upcoming Calls Scheduled";
 			case "recordings":
 				return "No Recordings Available";
 			default:
@@ -71,7 +72,15 @@ const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
 	const noCallsMessage = getNoCallsMessage();
 
 	return (
-		<div className="grid grid-cols-1 gap-5 xl:grid-cols-2 h-full relative">
+		<div
+			className={`grid grid-cols-1  w-full ${
+				calls?.length === 0
+					? "h-full xl:grid-cols-1 relative"
+					: pathname.includes("profile")
+					? "xl:grid-cols-1"
+					: "xl:grid-cols-2"
+			}  `}
+		>
 			{calls && calls.length > 0 ? (
 				calls.map((meeting: Call | CallRecording) => (
 					<MeetingCard
@@ -110,11 +119,11 @@ const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
 					/>
 				))
 			) : (
-				<div className="absolute bottom-0 flex flex-col w-full items-start justify-between h-full gap-7">
+				<div className="flex flex-col w-full items-center justify-center h-full gap-7">
 					<h1 className="text-2xl font-bold text-white">{noCallsMessage}</h1>
 					<Link
 						href="/"
-						className="flex gap-4 items-center p-4 rounded-lg justify-start bg-blue-1 hover:opacity-80 mx-auto"
+						className="flex gap-4 items-center p-4 rounded-lg justify-center bg-blue-1 hover:opacity-80 mx-auto w-1/3 te"
 					>
 						<Image src="/icons/Home.svg" alt="Home" width={24} height={24} />
 						<p className="text-lg font-semibold">Return Home</p>

@@ -65,6 +65,7 @@ export async function POST(req: Request) {
 			lastName: last_name!,
 			photo: image_url,
 			role: "client",
+			bio: "",
 		};
 
 		const newUser = await createUser(user);
@@ -74,6 +75,8 @@ export async function POST(req: Request) {
 				publicMetadata: {
 					userId: newUser._id,
 					role: "client",
+				},
+				unsafeMetadata: {
 					bio: "",
 				},
 			});

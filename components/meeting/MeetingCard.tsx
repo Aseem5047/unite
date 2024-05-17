@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { avatarImages } from "@/constants";
 import { useToast } from "../ui/use-toast";
 import { Button } from "../ui/button";
+import { usePathname } from "next/navigation";
 
 interface MeetingCardProps {
 	title: string;
@@ -29,9 +30,13 @@ const MeetingCard = ({
 	buttonText,
 }: MeetingCardProps) => {
 	const { toast } = useToast();
-
+	const pathname = usePathname();
 	return (
-		<section className="flex min-h-[258px] w-full flex-col justify-between rounded-[14px] px-5 py-8 xl:max-w-[568px] bg-[#137ef945]">
+		<section
+			className={`flex min-h-[258px] w-full flex-col justify-between rounded-[14px] px-5 py-8 xl:max-w-[568px] bg-[#137ef945] ${
+				pathname.includes("/profile") && "mx-auto"
+			}`}
+		>
 			<article className="flex flex-col gap-5">
 				<Image src={icon} alt="upcoming" width={28} height={28} />
 				<div className="flex justify-between">
