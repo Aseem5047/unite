@@ -6,6 +6,8 @@ export type CreateUserParams = {
 	username: string;
 	email: string;
 	photo: string;
+	role: string;
+	bio?: string;
 };
 
 export type UpdateUserParams = {
@@ -13,4 +15,5 @@ export type UpdateUserParams = {
 	lastName: string;
 	username: string;
 	photo: string;
+	bio?: string;
 };

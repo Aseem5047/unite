@@ -71,7 +71,7 @@ const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
 	const noCallsMessage = getNoCallsMessage();
 
 	return (
-		<div className="grid grid-cols-1 gap-5 xl:grid-cols-2 h-full">
+		<div className="grid grid-cols-1 gap-5 xl:grid-cols-2 h-full relative">
 			{calls && calls.length > 0 ? (
 				calls.map((meeting: Call | CallRecording) => (
 					<MeetingCard
@@ -110,7 +110,7 @@ const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
 					/>
 				))
 			) : (
-				<div className="flex flex-col w-full items-start justify-between h-full gap-7">
+				<div className="absolute bottom-0 flex flex-col w-full items-start justify-between h-full gap-7">
 					<h1 className="text-2xl font-bold text-white">{noCallsMessage}</h1>
 					<Link
 						href="/"

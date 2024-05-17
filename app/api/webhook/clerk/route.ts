@@ -64,6 +64,7 @@ export async function POST(req: Request) {
 			firstName: first_name!,
 			lastName: last_name!,
 			photo: image_url,
+			role: "client",
 		};
 
 		const newUser = await createUser(user);
@@ -72,6 +73,8 @@ export async function POST(req: Request) {
 			await clerkClient.users.updateUserMetadata(id, {
 				publicMetadata: {
 					userId: newUser._id,
+					role: "client",
+					bio: "",
 				},
 			});
 		}

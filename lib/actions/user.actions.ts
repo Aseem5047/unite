@@ -34,6 +34,19 @@ export async function getUserById(userId: string) {
 	}
 }
 
+export async function getUsers() {
+	try {
+		await connectToDatabase();
+		const users = await User.find();
+		if (!users || users.length === 0) {
+			throw new Error("No users found");
+		}
+		return JSON.parse(JSON.stringify(users));
+	} catch (error) {
+		console.log(error);
+	}
+}
+
 export async function updateUser(clerkId: string, user: UpdateUserParams) {
 	try {
 		await connectToDatabase();

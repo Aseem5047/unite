@@ -1,7 +1,8 @@
 "use client";
 
 import MeetingTypeList from "@/components/meeting/MeetingTypeList";
-import { clerkClient } from "@clerk/nextjs/server";
+import { getUsers } from "@/lib/actions/user.actions";
+import { useEffect, useState } from "react";
 
 const Home = () => {
 	const currentTime = new Date();
@@ -12,6 +13,22 @@ const Home = () => {
 	const date = new Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(
 		currentTime
 	);
+
+	const [users, setUsers] = useState(null);
+
+	useEffect(() => {
+		const getAllUsers = async () => {
+			try {
+				const userList = await getUsers();
+				setUsers(userList);
+			} catch (error) {
+				console.log("Error retrieving users");
+			}
+		};
+		getAllUsers();
+	}, []);
+
+	console.log(users);
 
 	return (
 		<section className="flex size-full flex-col gap-5 text-white">
