@@ -37,7 +37,7 @@ const EditProfile = ({
 	initialState,
 }: EditProfileProps) => {
 	const { user } = useUser();
-	const userId = user?.id || useParams();
+	const userId = user?.id;
 
 	// 1. Define your form.
 	const form = useForm<z.infer<typeof editProfileFormSchema>>({
