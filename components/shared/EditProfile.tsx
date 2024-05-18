@@ -53,40 +53,57 @@ const EditProfile = ({
 		},
 	});
 
+	// Utility function to get updated value or fallback to existing value
+	const getUpdatedValue = (
+		newValue: string,
+		initialValue: string,
+		existingValue: string
+	) => (newValue !== initialValue ? newValue : existingValue);
+
+	// Utility function to get non-empty bio or fallback to existing bio
+	const getBio = (newBio: string, existingBio: any) =>
+		newBio.length !== 0 ? newBio : existingBio;
+
 	// 2. Define a submit handler.
 	async function onSubmit(values: z.infer<typeof editProfileFormSchema>) {
 		try {
 			const updatedValues = {
-				firstName:
-					values.firstName !== initialState.firstName
-						? values.firstName
-						: userData.firstName,
-				lastName:
-					values.lastName !== initialState.lastName
-						? values.lastName
-						: userData.lastName,
-				username:
-					values.username !== initialState.username
-						? values.username
-						: userData.username,
-				bio: values.bio.length !== 0 ? values.bio : userData.bio,
+				firstName: getUpdatedValue(
+					values.firstName,
+					initialState.firstName,
+					userData.firstName
+				),
+				lastName: getUpdatedValue(
+					values.lastName,
+					initialState.lastName,
+					userData.lastName
+				),
+				username: getUpdatedValue(
+					values.username,
+					initialState.username,
+					userData.username
+				),
+				bio: getBio(values.bio, userData.bio),
 			};
 
 			const response = await axios.post("/api/update-user", updatedValues);
-
 			const updatedUser = response.data.updatedUser;
 
-			// Update user attributes
-			setUserData({
+			console.log("updatedUser ... ", updatedUser);
+
+			const newUserDetails = {
 				...userData,
-				fullName: updatedUser.firstName + " " + updatedUser.lastName,
+				fullName: `${updatedUser.firstName} ${updatedUser.lastName}`,
 				firstName: updatedUser.firstName,
 				lastName: updatedUser.lastName,
 				username: updatedUser.username,
-				bio: updatedUser.unsafeMetadata?.bio,
-			});
+				bio: updatedUser.unsafeMetadata.bio,
+			};
 
-			await updateUser(String(userId), userData);
+			await updateUser(String(userId), newUserDetails);
+
+			setUserData(newUserDetails);
+
 			toast({
 				title: "Details Edited Successfully",
 				description: "Changes are now visible on your profile section ...",
