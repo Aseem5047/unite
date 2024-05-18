@@ -36,7 +36,7 @@ const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
 			case "ended":
 				return "No Previous Calls Found";
 			case "upcoming":
-				return "No Upcoming Calls Scheduled";
+				return "No Upcoming Calls Found";
 			case "recordings":
 				return "No Recordings Available";
 			default:
@@ -123,7 +123,7 @@ const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
 					<h1 className="text-2xl font-bold text-white">{noCallsMessage}</h1>
 					<Link
 						href="/"
-						className="flex gap-4 items-center p-4 rounded-lg justify-center bg-blue-1 hover:opacity-80 mx-auto w-1/3 te"
+						className="flex gap-4 items-center p-4 rounded-lg justify-center bg-blue-1 hover:opacity-80 mx-auto w-1/2"
 					>
 						<Image src="/icons/Home.svg" alt="Home" width={24} height={24} />
 						<p className="text-lg font-semibold">Return Home</p>

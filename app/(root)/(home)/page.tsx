@@ -28,7 +28,7 @@ const Home = () => {
 		getAllUsers();
 	}, []);
 
-	console.log(users);
+	// console.log(users);
 
 	return (
 		<section className="flex size-full flex-col gap-5 text-white">

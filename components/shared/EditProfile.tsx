@@ -18,26 +18,29 @@ import { Input } from "@/components/ui/input";
 
 import { updateUser } from "@/lib/actions/user.actions";
 import { UpdateUserParams } from "@/types";
-import { useClerk, useUser } from "@clerk/nextjs";
-import { clerkClient } from "@clerk/nextjs/server";
-import { useParams } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 import React from "react";
 import { editProfileFormSchema } from "@/lib/validator";
 import { Textarea } from "../ui/textarea";
+import axios from "axios";
+import { useToast } from "../ui/use-toast";
 
 export type EditProfileProps = {
 	userData: UpdateUserParams;
 	setUserData: any;
 	initialState: UpdateUserParams;
+	setEditData: any;
 };
 
 const EditProfile = ({
 	userData,
 	setUserData,
 	initialState,
+	setEditData,
 }: EditProfileProps) => {
 	const { user } = useUser();
 	const userId = user?.id;
+	const { toast } = useToast();
 
 	// 1. Define your form.
 	const form = useForm<z.infer<typeof editProfileFormSchema>>({
@@ -53,41 +56,52 @@ const EditProfile = ({
 	// 2. Define a submit handler.
 	async function onSubmit(values: z.infer<typeof editProfileFormSchema>) {
 		try {
-			if (
-				values.firstName !== initialState.firstName ||
-				values.lastName !== initialState.lastName ||
-				values.username !== initialState.username
-			) {
-				user &&
-					clerkClient.users.updateUser(user?.id, {
-						firstName: values.firstName,
-						lastName: values.lastName,
-						username: values.username,
-					});
-			}
+			const updatedValues = {
+				firstName:
+					values.firstName !== initialState.firstName
+						? values.firstName
+						: userData.firstName,
+				lastName:
+					values.lastName !== initialState.lastName
+						? values.lastName
+						: userData.lastName,
+				username:
+					values.username !== initialState.username
+						? values.username
+						: userData.username,
+				bio: values.bio.length !== 0 ? values.bio : userData.bio,
+			};
 
-			if (values.bio !== initialState.bio) {
-				await clerkClient.users.updateUserMetadata(String(userId), {
-					unsafeMetadata: {
-						bio: values.bio,
-					},
-				});
-			}
+			const response = await axios.post("/api/update-user", updatedValues);
 
+			const updatedUser = response.data.updatedUser;
+
+			// Update user attributes
 			setUserData({
-				firstName: user?.firstName,
-				lastName: user?.lastName,
-				username: user?.username,
-				bio: String(user?.publicMetadata?.bio),
+				...userData,
+				fullName: updatedUser.firstName + " " + updatedUser.lastName,
+				firstName: updatedUser.firstName,
+				lastName: updatedUser.lastName,
+				username: updatedUser.username,
+				bio: updatedUser.unsafeMetadata?.bio,
 			});
 
 			await updateUser(String(userId), userData);
+			toast({
+				title: "Details Edited Successfully",
+				description: "Changes are now visible on your profile section ...",
+			});
+
+			setEditData((prev: boolean) => !prev);
 		} catch (error) {
 			console.log(error);
+			toast({
+				variant: "destructive",
+				title: "Unable to Edit Details",
+				description: "Try Again Editing your Details",
+			});
 		}
 	}
-
-	console.log(user);
 
 	return (
 		<Form {...form}>
